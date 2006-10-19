@@ -1,3 +1,15 @@
+molly-guard (0.2.1-1) unstable; urgency=low
+
+  * New upstream release, which does better shell quoting.
+
+ -- martin f. krafft <madduck@debian.org>  Thu, 19 Oct 2006 18:17:14 +0200
+
+molly-guard (0.2-1) unstable; urgency=low
+
+  * New upstream release, which handles --help related options better.
+
+ -- martin f. krafft <madduck@debian.org>  Thu, 19 Oct 2006 17:27:14 +0200
+
 molly-guard (0.1-1) unstable; urgency=low
 
   * Initial release
