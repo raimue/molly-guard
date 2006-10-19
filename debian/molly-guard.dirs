@@ -1,2 +1,4 @@
 usr/sbin
 usr/share/molly-guard
+usr/share/lintian/overrides
+usr/share/linda/overrides

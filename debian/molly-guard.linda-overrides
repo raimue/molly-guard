@@ -1,0 +1,2 @@
+Tag: no-manual-for-binary
+Data: ^(halt|reboot|shutdown)$
