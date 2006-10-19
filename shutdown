@@ -9,31 +9,49 @@
 #
 set -eu
 
+ME=molly-guard
+
 CMD="${0##*/}"
 EXEC="/sbin/$CMD"
+
 case "$CMD" in
   halt|reboot|shutdown)
+    if [ ! -f $EXEC ]; then
+      echo "E: $ME: not a regular file: $EXEC" >&2
+      exit 4
     if [ ! -x $EXEC ]; then
-      echo "E: not an executable: $EXEC" >&2
+      echo "E: $ME: not an executable: $EXEC" >&2
       exit 3
     fi
     ;;
   *)
-    echo "E: unsupported command: $CMD" >&2
+    echo "E: $ME: unsupported command: $CMD" >&2
     exit 1
     ;;
 esac
+ARGS="$@"
 
-if [ -n "${SSH_CONNECTION:-}" ] && test -t 0 && [ "${1:-}" != '--help' ]; then
-  echo -n "SSH session detected, type in hostname of the machine to $CMD: "
-  read HOSTNAME_USER
+do_real_cmd()
+{
+  exec $EXEC "$ARGS"
+}
 
-  HOSTNAME="$(hostname)"
+# require $SSH_CONNECTION to be set, indicates an SSH session
+[ -n "${SSH_CONNECTION:-}" ] || do_real_cmd
+# require an interactive terminal connected to stdin
+test -t 0                    || do_real_cmd
+# pass through help commands
+case "$CMD $ARGS" in
+  'shutdown*-c'|'*-h') do_real_cmd;;
+  *) :;;
+esac
 
-  if [ "$HOSTNAME_USER" != "$HOSTNAME" ]; then
-    echo "Good thing I asked; I won't $CMD $HOSTNAME ..."
-    exit 2
-  fi
+echo -n "$ME: SSH session detected, type in hostname of the machine to $CMD: "
+read HOSTNAME_USER
+
+HOSTNAME="$(hostname)"
+
+if [ "$HOSTNAME_USER" != "$HOSTNAME" ]; then
+  echo "Good thing I asked; I won't $CMD $HOSTNAME ..."
+  exit 2
 fi
-
-exec $EXEC "$@"
