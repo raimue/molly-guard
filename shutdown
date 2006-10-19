@@ -36,11 +36,11 @@ do_real_cmd()
 {
   case "$ARGS" in
     (*--molly-guard-do-nothing*)
-      ARGS0="${ARGS%%--molly-guard-do-nothing*}"
+      ARGS0="${ARGS%% --molly-guard-do-nothing*}"
       ARGS1="${ARGS##*--molly-guard-do-nothing}"
-      echo "$ME: would run: $EXEC $ARGS0 $ARGS1"
+      echo "$ME: would run: $EXEC $ARGS0 ${ARGS1# }"
       exit 0;;
-    *) exec $EXEC "$ARGS";;
+    *) eval exec $EXEC "$ARGS";;
   esac
 }
 
@@ -51,7 +51,8 @@ test -t 0                    || do_real_cmd
 # pass through help commands
 case "$CMD $ARGS" in
   (shutdown\ *-c*) do_real_cmd;;
-  (*-h*) do_real_cmd;;
+  (shutdown\ *-h*) do_real_cmd;;
+  (*--help*) do_real_cmd;;
   *) :;;
 esac
 
