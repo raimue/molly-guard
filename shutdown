@@ -1,0 +1,39 @@
+#!/bin/sh
+#
+# shutdown -- wrapper script to prevent erroneous shutdowns via SSH
+#
+# Copyright © martin f. krafft <madduck@madduck.net>
+# Released under the terms of the Artistic Licence 2.0
+#
+# $Id: shutdown 299 2006-10-16 14:40:47Z madduck $
+#
+set -eu
+
+CMD="${0##*/}"
+EXEC="/sbin/$CMD"
+case "$CMD" in
+  halt|reboot|shutdown)
+    if [ ! -x $EXEC ]; then
+      echo "E: not an executable: $EXEC" >&2
+      exit 3
+    fi
+    ;;
+  *)
+    echo "E: unsupported command: $CMD" >&2
+    exit 1
+    ;;
+esac
+
+if [ -n "${SSH_CONNECTION:-}" ] && test -t 0 && [ "${1:-}" != '--help' ]; then
+  echo -n "SSH session detected, type in hostname of the machine to $CMD: "
+  read HOSTNAME_USER
+
+  HOSTNAME="$(hostname)"
+
+  if [ "$HOSTNAME_USER" != "$HOSTNAME" ]; then
+    echo "Good thing I asked; I won't $CMD $HOSTNAME ..."
+    exit 2
+  fi
+fi
+
+exec $EXEC "$@"
