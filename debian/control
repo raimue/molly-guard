@@ -6,7 +6,7 @@ Build-Depends-Indep: debhelper (>= 5)
 Standards-Version: 3.7.2
 XS-Vcs-Svn: svn://svn.debian.org/collab-maint/deb-maint/safe-shutdown/trunk
 
-Package: safe-shutdown
+Package: molly-guard
 Architecture: all
 Depends: sysvinit | upstart
 Enhances: sysvinit, upstart
