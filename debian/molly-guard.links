@@ -1,0 +1,2 @@
+usr/sbin/shutdown usr/sbin/halt
+usr/sbin/shutdown usr/sbin/reboot

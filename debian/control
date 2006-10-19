@@ -1,0 +1,22 @@
+Source: molly-guard
+Section: admin
+Priority: extra
+Maintainer: martin f. krafft <madduck@debian.org>
+Build-Depends-Indep: debhelper (>= 5)
+Standards-Version: 3.7.2
+XS-Vcs-Svn: svn://svn.debian.org/collab-maint/deb-maint/safe-shutdown/trunk
+
+Package: safe-shutdown
+Architecture: all
+Depends: sysvinit | upstart
+Enhances: sysvinit, upstart
+Description: protects remote machines from accidental shutdowns/reboots
+ The package installs a shell script that  overrides the existing
+ shutdown/reboot/halt commands. If any of the three commands are called
+ interactively over an SSH session, the shell script prompts you to enter the
+ name of the host you wish to shut down. This should adequatly prevent you
+ from accidental shutdowns and reboots.
+ .
+ This shell script passes through the commands to the respective binaries in
+ /sbin and should thus not get in the way if called non-interactively, or
+ locally.
