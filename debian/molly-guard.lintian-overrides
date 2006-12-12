@@ -1,4 +1,5 @@
 molly-guard binary: binary-without-manpage shutdown
 molly-guard binary: binary-without-manpage reboot
 molly-guard binary: binary-without-manpage halt
+molly-guard binary: binary-without-manpage poweroff
 molly-guard binary: depends-on-essential-package-without-using-version depends: sysvinit

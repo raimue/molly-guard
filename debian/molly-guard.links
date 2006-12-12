@@ -1,3 +1,4 @@
 usr/share/molly-guard/shutdown usr/sbin/shutdown
 usr/share/molly-guard/shutdown usr/sbin/reboot
 usr/share/molly-guard/shutdown usr/sbin/halt
+usr/share/molly-guard/shutdown usr/sbin/poweroff
