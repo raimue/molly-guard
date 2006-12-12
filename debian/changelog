@@ -1,8 +1,10 @@
-molly-guard (0.2.1-2) unstable; urgency=low
+molly-guard (0.2.2-1) unstable; urgency=low
 
-  * Now also protects the poweroff command (closes: #401042).
+  * New upstream release:
+    - now also protects the poweroff command (closes: #401042).
+  * Added missing licence text to copyright file (closes: #399726).
 
- -- martin f. krafft <madduck@debian.org>  Tue, 12 Dec 2006 12:56:28 +0100
+ -- martin f. krafft <madduck@debian.org>  Tue, 12 Dec 2006 12:58:55 +0100
 
 molly-guard (0.2.1-1) unstable; urgency=low
 
