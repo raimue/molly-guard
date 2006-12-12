@@ -15,7 +15,7 @@ CMD="${0##*/}"
 EXEC="/sbin/$CMD"
 
 case "$CMD" in
-  halt|reboot|shutdown)
+  halt|reboot|shutdown|poweroff)
     if [ ! -f $EXEC ]; then
       echo "E: $ME: not a regular file: $EXEC" >&2
       exit 4
