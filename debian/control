@@ -14,7 +14,7 @@ Description: protects remote machines from accidental shutdowns/reboots
  The package installs a shell script that  overrides the existing
  shutdown/reboot/halt/poweroff commands. If any of the three commands are
  called interactively over an SSH session, the shell script prompts you to
- enter the name of the host you wish to shut down. This should adequatly
+ enter the name of the host you wish to shut down. This should adequately
  prevent you from accidental shutdowns and reboots.
  .
  This shell script passes through the commands to the respective binaries in
