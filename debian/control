@@ -8,8 +8,8 @@ XS-Vcs-Svn: svn://svn.debian.org/collab-maint/deb-maint/safe-shutdown/trunk
 
 Package: molly-guard
 Architecture: all
-Depends: sysvinit | upstart
-Enhances: sysvinit, upstart
+Depends: sysvinit | upstart, procps
+Enhances: sysvinit, upstart, openssh-server
 Description: protects remote machines from accidental shutdowns/reboots
  The package installs a shell script that  overrides the existing
  shutdown/reboot/halt/poweroff commands. If any of the three commands are

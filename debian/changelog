@@ -1,4 +1,4 @@
-molly-guard (0.3-1) unstable; urgency=low
+molly-guard (0.3-1~unreleased.1) unstable; urgency=low
 
   * Now should also work in su/sudo sessions because it now checks whether the
     creator of the current tty/pts is sshd, rather than the brittle check for
@@ -6,7 +6,7 @@ molly-guard (0.3-1) unstable; urgency=low
     of brilliance (closes: #425831).
   * Corrected a typo in the package description (closes: #408706).
 
- -- martin f. krafft <madduck@debian.org>  Thu, 24 May 2007 14:17:16 +0200
+ -- martin f. krafft <madduck@debian.org>  Thu, 24 May 2007 14:47:58 +0200
 
 molly-guard (0.2.2-1) unstable; urgency=low
 
