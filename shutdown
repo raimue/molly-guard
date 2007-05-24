@@ -44,10 +44,14 @@ do_real_cmd()
   esac
 }
 
-# require $SSH_CONNECTION to be set, indicates an SSH session
-[ -n "${SSH_CONNECTION:-}" ] || do_real_cmd
 # require an interactive terminal connected to stdin
 test -t 0                    || do_real_cmd
+
+# only run if we are being called over SSH, that is if the current terminal
+# was created by sshd.
+PTS=$(readlink /proc/$$/fd/0)
+pgrep -f "^sshd.+${PTS#/dev/}$" >/dev/null || do_real_cmd
+
 # pass through help commands
 case "$CMD $ARGS" in
   (shutdown\ *-c*) do_real_cmd;;
