@@ -1,3 +1,9 @@
+molly-guard (0.3-1~unreleased.2) unstable; urgency=low
+
+  * Fix the regular expression to find the sshd parent process.
+
+ -- martin f. krafft <madduck@debian.org>  Fri, 25 May 2007 11:58:49 +0200
+
 molly-guard (0.3-1~unreleased.1) unstable; urgency=low
 
   * Now should also work in su/sudo sessions because it now checks whether the
