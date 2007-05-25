@@ -50,7 +50,7 @@ test -t 0                    || do_real_cmd
 # only run if we are being called over SSH, that is if the current terminal
 # was created by sshd.
 PTS=$(readlink /proc/$$/fd/0)
-pgrep -f "^sshd.+${PTS#/dev/}$" >/dev/null || do_real_cmd
+pgrep -f "^sshd.+${PTS#/dev/}[[:space:]]*$" >/dev/null || do_real_cmd
 
 # pass through help commands
 case "$CMD $ARGS" in
