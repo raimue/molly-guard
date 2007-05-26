@@ -30,19 +30,59 @@ case "$CMD" in
     exit 1
     ;;
 esac
-ARGS="$@"
+
+usage()
+{
+  cat <<-_eousage
+	Usage: $ME [options]
+	       (shielding $EXEC)
+
+	Instead of invoking $EXEC directly, $ME will prompt the user for the
+	machine's hostname to guard against accidental shutdowns/reboots, if the
+	current shell is a child of an SSH connection (or --pretend-ssh) has been
+	given on the command line, if the shell is connected to an interactive
+	terminal, and the actual command to execute is does not involve --help or is
+	\`shutdown -c'.
+
+	Only if the user enters the machine's hostname correctly will $ME take
+	action. Specifying --molly-guard-do-nothing as argument to the command will
+	make $ME echo the command it would execute rather than actually executing
+	it.
+
+	The actual command's help output follows:
+
+	_eousage
+}
+
+ARGS=
+DO_NOTHING=0
+PRETEND_SSH=0
+for arg in "$@"; do
+  case "$arg" in
+    (*-molly-guard-do-nothing) DO_NOTHING=1;;
+    (*-help)
+      usage 2>&1
+      eval $EXEC --help 2>&1
+      exit 0
+      ;;
+    (*-pretend-ssh) PRETEND_SSH=1;;
+    *) ARGS="${ARGS:+$ARGS }$arg";;
+  esac
+done
 
 do_real_cmd()
 {
-  case "$ARGS" in
-    (*--molly-guard-do-nothing*)
-      ARGS0="${ARGS%%--molly-guard-do-nothing*}"
-      ARGS1="${ARGS##*--molly-guard-do-nothing}"
-      echo "$ME: would run: $EXEC ${ARGS0# } ${ARGS1# }"
-      exit 0;;
-    *) eval exec $EXEC "$ARGS";;
-  esac
+  if [ $DO_NOTHING -eq 1 ]; then
+    echo "$ME: would run: $EXEC $ARGS"
+    exit 0
+  else
+    eval exec $EXEC "$ARGS"
+  fi
 }
+
+if [ $DO_NOTHING -eq 1 ]; then
+  echo "I: demo mode; $ME will not do anything due to --molly-guard-do-nothing."
+fi
 
 # require an interactive terminal connected to stdin
 test -t 0                    || do_real_cmd
@@ -50,14 +90,22 @@ test -t 0                    || do_real_cmd
 # only run if we are being called over SSH, that is if the current terminal
 # was created by sshd.
 PTS=$(readlink /proc/$$/fd/0)
-pgrep -f "^sshd.+${PTS#/dev/}[[:space:]]*$" >/dev/null || do_real_cmd
+if ! pgrep -f "^sshd.+${PTS#/dev/}[[:space:]]*$" >/dev/null; then
+  if [ $PRETEND_SSH -eq 1 ]; then
+    echo "I: this is not an SSH session, but --pretend-ssh was given..."
+  else
+    do_real_cmd
+  fi
+else
+  echo "W: $ME: SSH session detected!"
+fi
 
-# pass through help commands
+# pass through certain commands
 case "$CMD $ARGS" in
-  (shutdown\ *-c*) do_real_cmd;;
-  (shutdown\ *-h*) do_real_cmd;;
-  (*--help*) do_real_cmd;;
-  *) :;;
+  (*shutdown\ *-c*) 
+    echo "I: executing $CMD $ARGS regardless of SSH session."
+    do_real_cmd
+    ;;
 esac
 
 HOSTNAME="$(hostname)"
@@ -70,7 +118,6 @@ sigh()
 
 trap 'echo;sigh' 1 2 3 9 10 12 15
 
-echo "$ME: SSH session detected!"
 echo -n "Please type in hostname of the machine to $CMD: "
 read HOSTNAME_USER || :
 
