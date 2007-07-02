@@ -1,3 +1,10 @@
+molly-guard (0.3-2) unstable; urgency=low
+
+  * Pass --short option to hostname to prevent the user from having to type
+    the whole FQDN at times (closes: #431205).
+
+ -- martin f. krafft <madduck@debian.org>  Mon, 02 Jul 2007 18:26:09 +0200
+
 molly-guard (0.3-1) unstable; urgency=low
 
   * Shield shutdown -h; I am terribly sorry, Andrew! (closes: #426107).
