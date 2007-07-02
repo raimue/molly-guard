@@ -108,7 +108,7 @@ case "$CMD $ARGS" in
     ;;
 esac
 
-HOSTNAME="$(hostname)"
+HOSTNAME="$(hostname --short)"
 
 sigh()
 {
