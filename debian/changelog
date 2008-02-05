@@ -1,3 +1,9 @@
+molly-guard (0.3-3) UNRELEASED; urgency=low
+
+  * Tweak description and Vcs link.
+
+ -- Thijs Kinkhorst <thijs@debian.org>  Tue, 05 Feb 2008 09:58:30 +0100
+
 molly-guard (0.3-2) unstable; urgency=low
 
   * Pass --short option to hostname to prevent the user from having to type

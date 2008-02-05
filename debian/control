@@ -4,15 +4,15 @@ Priority: extra
 Maintainer: martin f. krafft <madduck@debian.org>
 Build-Depends: debhelper (>= 5)
 Standards-Version: 3.7.2
-XS-Vcs-Svn: svn://svn.debian.org/collab-maint/deb-maint/safe-shutdown/trunk
+Vcs-Svn: svn://svn.debian.org/collab-maint/deb-maint/molly-guard/trunk
 
 Package: molly-guard
 Architecture: all
 Depends: sysvinit | upstart, procps
 Enhances: sysvinit, upstart, openssh-server
 Description: protects remote machines from accidental shutdowns/reboots
- The package installs a shell script that  overrides the existing
- shutdown/reboot/halt/poweroff commands. If any of the three commands are
+ The package installs a shell script that overrides the existing
+ shutdown/reboot/halt/poweroff commands. If any of the four commands are
  called interactively over an SSH session, the shell script prompts you to
  enter the name of the host you wish to shut down. This should adequately
  prevent you from accidental shutdowns and reboots.
