@@ -1,8 +1,6 @@
 #!/usr/bin/make -f
 # Copyright © martin f. krafft <madduck@debian.org>
 # Distributable under the terms of the Artistic Licence 2.0
-#
-# $Id: rules 133 2006-08-20 23:34:27Z madduck $
 
 # Uncomment this to turn on verbose mode.
 #export DH_VERBOSE=1
