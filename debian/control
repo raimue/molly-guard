@@ -4,7 +4,8 @@ Priority: extra
 Maintainer: martin f. krafft <madduck@debian.org>
 Build-Depends: debhelper (>= 5)
 Standards-Version: 3.7.2
-Vcs-Svn: svn://svn.debian.org/collab-maint/deb-maint/molly-guard/trunk
+Vcs-Git: git://git.debian.org/git/collab-maint/molly-guard.git
+Vcs-Browser: http://git.debian.org/?p=collab-maint/molly-guard.git
 
 Package: molly-guard
 Architecture: all
