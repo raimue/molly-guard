@@ -1,8 +1,13 @@
-molly-guard (0.3-3) UNRELEASED; urgency=low
+molly-guard (0.3.1-1) unstable; urgency=low
 
-  * Tweak description and Vcs link.
+  [ martin f. krafft ]
+  * New upstream release (closes: #469951).
+  * Fix Vcs-* links, which now point to the new Git repo.
 
- -- Thijs Kinkhorst <thijs@debian.org>  Tue, 05 Feb 2008 09:58:30 +0100
+  [ Thijs Kinkhorst ]
+  * Tweak description.
+
+ -- martin f. krafft <madduck@debian.org>  Wed, 12 Mar 2008 19:56:49 +0100
 
 molly-guard (0.3-2) unstable; urgency=low
 
