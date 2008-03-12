@@ -5,6 +5,7 @@ molly-guard (0.3.1-1) unstable; urgency=low
   * Fix Vcs-* links, which now point to the new Git repo.
   * Bump debhelper compatibility level to 6; no other changes required.
   * Bump Standards-Version to 3.7.3; no other changes required.
+  * Add a basic README file.
 
   [ Thijs Kinkhorst ]
   * Tweak description.
