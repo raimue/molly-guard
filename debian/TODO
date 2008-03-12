@@ -5,8 +5,3 @@ molly-guard TODO
   completely, or blanket-prevent any of the commands (so there's not even
   a prompt) for remote machines that need not be rebooted ever. or something
   like that.
-
-- sudo munges $SSH_CONNECTION, so invent something for people who login to
-  remote machines a non-root and use sudo to reboot/halt/shutdown.
-
-$Id$
