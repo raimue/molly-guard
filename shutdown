@@ -90,12 +90,13 @@ test -t 0                    || do_real_cmd
 # only run if we are being called over SSH, that is if the current terminal
 # was created by sshd.
 PTS=$(readlink /proc/$$/fd/0)
-if ! pgrep -f "^sshd.+${PTS#/dev/}[[:space:]]*$" >/dev/null; then
-  if [ $PRETEND_SSH -eq 1 ]; then
-    echo "I: this is not an SSH session, but --pretend-ssh was given..."
-  else
-    do_real_cmd
-  fi
+if ! pgrep -f "^sshd.+${PTS#/dev/}[[:space:]]*$" >/dev/null \
+  && [ -z "$SSH_CONNECTION" ]; then
+    if [ $PRETEND_SSH -eq 1 ]; then
+      echo "I: this is not an SSH session, but --pretend-ssh was given..."
+    else
+      do_real_cmd
+    fi
 else
   echo "W: $ME: SSH session detected!"
 fi
