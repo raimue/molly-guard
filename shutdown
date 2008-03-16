@@ -91,7 +91,7 @@ test -t 0                    || do_real_cmd
 # was created by sshd.
 PTS=$(readlink /proc/$$/fd/0)
 if ! pgrep -f "^sshd.+${PTS#/dev/}[[:space:]]*$" >/dev/null \
-  && [ -z "$SSH_CONNECTION" ]; then
+  && [ -z "${SSH_CONNECTION:-}" ]; then
     if [ $PRETEND_SSH -eq 1 ]; then
       echo "I: this is not an SSH session, but --pretend-ssh was given..."
     else
