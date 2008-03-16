@@ -1,3 +1,10 @@
+molly-guard (0.3.1-2) unstable; urgency=low
+
+  * Prevent set -u from falling over unset SSH_CONNECTION variable
+    (closes: #471129).
+
+ -- martin f. krafft <madduck@debian.org>  Sun, 16 Mar 2008 08:55:37 +0100
+
 molly-guard (0.3.1-1) unstable; urgency=low
 
   [ martin f. krafft ]
