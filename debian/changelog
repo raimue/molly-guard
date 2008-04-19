@@ -4,6 +4,8 @@ molly-guard (0.3.3-1) unstable; urgency=low
   * New upstream release
     + use run-parts to allow additional checks to be added easily.
     + add setting to always molly-guard a host (Closes: #470681)
+    + possibly print out a warning message before taking action.
+      (Closes: 476508)
 
  -- Andrew Ruthven <andrew@etc.gen.nz>  Sat, 19 Apr 2008 13:52:51 +1200
 
