@@ -37,11 +37,10 @@ binary-indep: build install
 	dh_testroot
 	dh_installchangelogs 
 	dh_installdocs
+	dh_installman
 
 	install -m644 debian/molly-guard.lintian-overrides \
 		$(DESTDIR)/usr/share/lintian/overrides/molly-guard
-	install -m644 debian/molly-guard.linda-overrides \
-		$(DESTDIR)/usr/share/linda/overrides/molly-guard
 
 	dh_compress
 	dh_fixperms
