@@ -107,7 +107,7 @@ case "$CMD $ARGS" in
     ;;
 esac
 
-run-parts --exit-on-error $CHECK_ARGS /usr/share/molly-guard/checks.d
+run-parts --exit-on-error --arg $CMD $CHECK_ARGS /usr/share/molly-guard/checks.d
 
 # run-parts won't return to us if there are failures, but I'm paranoid.
 if [ $? == 0 ]; then
