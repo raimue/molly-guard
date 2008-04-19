@@ -37,15 +37,18 @@ usage()
 	Usage: $ME [options]
 	       (shielding $EXEC)
 
-	Instead of invoking $EXEC directly, $ME will prompt the user for the
-	machine's hostname to guard against accidental shutdowns/reboots, if the
-	current shell is a child of an SSH connection (or --pretend-ssh) has been
-	given on the command line, if the shell is connected to an interactive
-	terminal, and the actual command to execute is does not involve --help or is
-	\`shutdown -c'.
+	Instead of invoking $EXEC directly, $ME will run a number of checks
+        to guard against accidental shutdowns/reboots.
 
-	Only if the user enters the machine's hostname correctly will $ME take
-	action. Specifying --molly-guard-do-nothing as argument to the command will
+        Some of the checks available are:
+         - Prompt the user for the machine's if the current shell is a child
+           of an SSH connection (or --pretend-ssh) has been given on the
+           command line, if the shell is connected to an interactive
+	   terminal, and the actual command to execute is does not involve
+           --help or is \`shutdown -c'.
+
+	Only if the user satisfies all the checks will $ME take action.
+	Specifying --molly-guard-do-nothing as argument to the command will
 	make $ME echo the command it would execute rather than actually executing
 	it.
 
@@ -56,7 +59,7 @@ usage()
 
 ARGS=
 DO_NOTHING=0
-PRETEND_SSH=0
+CHECK_ARGS=
 for arg in "$@"; do
   case "$arg" in
     (*-molly-guard-do-nothing) DO_NOTHING=1;;
@@ -65,7 +68,7 @@ for arg in "$@"; do
       eval $EXEC --help 2>&1
       exit 0
       ;;
-    (*-pretend-ssh) PRETEND_SSH=1;;
+    (*-pretend-ssh) CHECK_ARGS="${CHECK_ARGS:+$CHECK_ARGS }--arg --pretend-ssh";;
     *) ARGS="${ARGS:+$ARGS }$arg";;
   esac
 done
@@ -84,46 +87,18 @@ if [ $DO_NOTHING -eq 1 ]; then
   echo "I: demo mode; $ME will not do anything due to --molly-guard-do-nothing."
 fi
 
-# require an interactive terminal connected to stdin
-test -t 0                    || do_real_cmd
-
-# only run if we are being called over SSH, that is if the current terminal
-# was created by sshd.
-PTS=$(readlink /proc/$$/fd/0)
-if ! pgrep -f "^sshd.+${PTS#/dev/}[[:space:]]*$" >/dev/null \
-  && [ -z "${SSH_CONNECTION:-}" ]; then
-    if [ $PRETEND_SSH -eq 1 ]; then
-      echo "I: this is not an SSH session, but --pretend-ssh was given..."
-    else
-      do_real_cmd
-    fi
-else
-  echo "W: $ME: SSH session detected!"
-fi
-
 # pass through certain commands
 case "$CMD $ARGS" in
   (*shutdown\ *-c*) 
-    echo "I: executing $CMD $ARGS regardless of SSH session."
+    echo "I: executing $CMD $ARGS regardless of check results."
     do_real_cmd
     ;;
 esac
 
-HOSTNAME="$(hostname --short)"
+run-parts --exit-on-error $CHECK_ARGS /usr/share/molly-guard/checks.d
 
-sigh()
-{
-  echo "Good thing I asked; I won't $CMD $HOSTNAME ..."
-  exit 2
-}
-
-trap 'echo;sigh' 1 2 3 9 10 12 15
-
-echo -n "Please type in hostname of the machine to $CMD: "
-read HOSTNAME_USER || :
-
-[ "$HOSTNAME_USER" = "$HOSTNAME" ] || sigh
-
-trap - 1 2 3 9 10 12 15
-
-do_real_cmd
+# run-parts won't return to us if there are failures, but I'm paranoid.
+if [ $? == 0 ]; then
+  do_real_cmd
+  exit
+fi
