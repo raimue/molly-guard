@@ -1,4 +1,4 @@
 usr/sbin
-usr/share/molly-guard
+etc/molly-guard/run.d
+etc/molly-guard/messages.d
 usr/share/lintian/overrides
-usr/share/linda/overrides
