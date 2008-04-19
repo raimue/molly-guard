@@ -10,7 +10,6 @@ set -eu
 ME=molly-guard
 VERSION=0.4
 SCRIPTSDIR=/etc/molly-guard/run.d
-SCRIPTSDIR="${0%/*}/run.d"
 
 CMD="${0##*/}"
 EXEC="/sbin/$CMD"
