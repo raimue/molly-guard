@@ -19,10 +19,7 @@ for arg in "$@"; do
 done
 
 # require an interactive terminal connected to stdin
-if ! test -t 0; then
-  echo "E: $ME: not connected to a terminal."
-  exit 1
-fi
+test -t 0 || exit 0
 
 # we've been asked to always protect this host
 if [ ${ALWAYS_QUERY_HOSTNAME:-0} -eq 1 ]; then
