@@ -164,7 +164,7 @@ and docbook-xsl in your Build-Depends control field.
     <para> &dhcommand; was primarily designed to shield SSH connections. This
       functionality (which should arguably be provided by the
       <package>openssh-server</package> package) is implemented in
-      <filename>/etc/molly-guard/run.d/10-print-message</filename>.</para>
+      <filename>/etc/molly-guard/run.d/30-query-hostname</filename>.</para>
 
     <para> This script first tests whether the command is being executed from
       a <filename>tty</filename> which has been created by
@@ -177,7 +177,7 @@ and docbook-xsl in your Build-Depends control field.
     <para> You can pass the <option>--pretend-ssh</option> script option to
       &dhcommand; to pretend that those tests succeeds. Alternatively, setting
       <envar>ALWAYS_QUERY_HOSTNAME</envar> in
-      <filename>/etc/default/molly-guard</filename> causes the script to
+      <filename>/etc/molly-guard/rc</filename> causes the script to
       always query.</para>
 
     <para> The following situations are still UNGUARDED. If you can think of
