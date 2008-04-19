@@ -40,11 +40,11 @@ usage()
         to guard against accidental shutdowns/reboots.
 
         Some of the checks available are:
-         - Prompt the user for the machine's if the current shell is a child
-           of an SSH connection (or --pretend-ssh) has been given on the
-           command line, if the shell is connected to an interactive
-	   terminal, and the actual command to execute is does not involve
-           --help or is \`shutdown -c'.
+        - Prompt the user for the machine's if the current shell is a child
+          of an SSH connection (or --pretend-ssh) has been given on the
+          command line, if the shell is connected to an interactive
+	  terminal, and the actual command to execute is does not involve
+          --help or is \`shutdown -c'.
 
 	  $ME will always interpose the prompt if the environment variable
           ALWAYS_MOLLY is set to '1'.  This variable may be set in the file
