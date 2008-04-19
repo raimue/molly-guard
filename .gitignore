@@ -1,4 +1,4 @@
-build-stamp
-configure-stamp
-debian/files
-debian/molly-guard/
+/build-stamp
+/configure-stamp
+.*.sw?
+/molly-guard.8
