@@ -5,8 +5,6 @@
 # Copyright © martin f. krafft <madduck@madduck.net>
 # Released under the terms of the Artistic Licence 2.0
 #
-# $Id: shutdown 299 2006-10-16 14:40:47Z madduck $
-#
 set -eu
 
 ME=molly-guard
