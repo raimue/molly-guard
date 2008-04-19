@@ -9,9 +9,11 @@ set -eu
 
 ME=molly-guard
 
+ALWAYS_MOLLY=${ALWAYS_MOLLY:-"0"}
+[ -f /etc/default/${ME} ] && . /etc/default/${ME}
+
+CMD=$1; shift
 PRETEND_SSH=0
-CMD=$1
-shift
 for arg in "$@"; do
   case "$arg" in
     (*-help)
@@ -26,18 +28,23 @@ done
 # require an interactive terminal connected to stdin
 test -t 0                    || exit 0
 
-# only run if we are being called over SSH, that is if the current terminal
-# was created by sshd.
-PTS=$(readlink /proc/$$/fd/0)
-if ! pgrep -f "^sshd.+${PTS#/dev/}[[:space:]]*$" >/dev/null \
-  && [ -z "${SSH_CONNECTION:-}" ]; then
-    if [ $PRETEND_SSH -eq 1 ]; then
-      echo "I: this is not an SSH session, but --pretend-ssh was given..."
-    else
-      exit 0
-    fi
+# we've been asked to always protect this host
+if [ ${ALWAYS_MOLLY} -eq 1 ]; then
+  echo "W: $ME: ${CMD} is always molly-guarded on this server."
 else
-  echo "W: $ME: SSH session detected!"
+  # only run if we are being called over SSH, that is if the current terminal
+  # was created by sshd.
+  PTS=$(readlink /proc/$$/fd/0)
+  if ! pgrep -f "^sshd.+${PTS#/dev/}[[:space:]]*$" >/dev/null \
+    && [ -z "${SSH_CONNECTION:-}" ]; then
+      if [ $PRETEND_SSH -eq 1 ]; then
+        echo "I: this is not an SSH session, but --pretend-ssh was given..."
+      else
+        exit 0
+      fi
+  else
+    echo "W: $ME: SSH session detected!"
+  fi
 fi
 
 
