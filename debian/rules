@@ -13,11 +13,13 @@ configure-stamp:
 build: build-stamp
 build-stamp: configure-stamp 
 	dh_testdir
+	$(MAKE)
 	touch $@
 
 clean:
 	dh_testdir
 	dh_testroot
+	$(MAKE) clean
 	rm -f build-stamp configure-stamp
 	dh_clean 
 
