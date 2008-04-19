@@ -1,0 +1,28 @@
+#!/bin/sh
+#
+# print a warning message before rebooting/shutting down etc a machine.
+#
+# Copyright <C2><A9> Andrew Ruthven <andrew@etc.gen.nz>
+# Released under the terms of the Artistic Licence 2.0
+#
+# Cat out either /etc/molly-guard.$CMD.message
+#             or /etc/molly-guard.message
+# If present.
+CMD=$1; shift
+
+FILE=
+BANNER=
+
+if [ -f /etc/molly-guard.$CMD.message ]; then
+  echo "$(hostname -s) has a $CMD warning message:"
+  FILE=/etc/molly-guard.$CMD.message
+elif [ -f /etc/molly-guard.message ]; then
+  FILE=/etc/molly-guard.message
+  echo "$(hostname -s) has a warning message:"
+fi
+
+if [ "x$FILE" != "x" ]; then
+  echo $BANNER
+  cat $FILE
+  echo ""
+fi
