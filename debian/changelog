@@ -1,13 +1,14 @@
-molly-guard (0.3.3-1) unstable; urgency=low
+molly-guard (0.4-1~exp.1) experimental; urgency=low
 
-  * Non-maintainer upload.
-  * New upstream release
-    + use run-parts to allow additional checks to be added easily.
-    + add setting to always molly-guard a host (Closes: #470681)
-    + possibly print out a warning message before taking action.
-      (Closes: 476508)
+  * New upstream release, thanks a lot to Andrew Ruthven for his input and
+    patches.
+    - use run-parts to allow additional checks to be added easily.
+    - add setting to always molly-guard a host (closes: #470681, #471382).
+    - possibly print out a warning message before taking action
+      (closes: 476508).
+  * Add a molly-guard(8) manpage and migrate the content from README there.
 
- -- Andrew Ruthven <andrew@etc.gen.nz>  Sat, 19 Apr 2008 13:52:51 +1200
+ -- martin f. krafft <madduck@debian.org>  Sat, 19 Apr 2008 15:36:36 +0200
 
 molly-guard (0.3.2-1) unstable; urgency=low
 
