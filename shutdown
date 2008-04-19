@@ -90,14 +90,14 @@ do_real_cmd()
 }
 
 if [ $DO_NOTHING -eq 1 ]; then
-  echo "I: demo mode; $ME will not do anything due to --molly-guard-do-nothing."
+  echo "I: demo mode; $ME will not do anything due to --molly-guard-do-nothing." >&2
 fi
 
 # pass through certain commands
 case "$CMD $CMDARGS" in
   (*shutdown\ *-c*)
     # allow canceling shutdowns
-    echo "I: executing $CMD $CMDARGS regardless of check results."
+    echo "I: executing $CMD $CMDARGS regardless of check results." >&2
     do_real_cmd
     ;;
 esac
@@ -110,7 +110,7 @@ for script in $(run-parts --test $SCRIPTSDIR); do
   ret=0
   eval $script $SCRIPTARGS || ret=$?
   if [ $ret -ne 0 ]; then
-    echo "W: aborting $CMD due to ${script##*/} exiting with code $ret."
+    echo "W: aborting $CMD due to ${script##*/} exiting with code $ret." >&2
     exit $ret
   fi
 done
