@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-# shutdown -- wrapper script to prevent erroneous shutdowns via SSH
+# shutdown -- wrapper script to guard against accidental shutdowns
 #
 # Copyright © martin f. krafft <madduck@madduck.net>
 # Released under the terms of the Artistic Licence 2.0
@@ -8,7 +8,9 @@
 set -eu
 
 ME=molly-guard
-CHECKSDIR=/etc/molly-guard/checks.d
+VERSION=0.4
+SCRIPTSDIR=/etc/molly-guard/run.d
+SCRIPTSDIR="${0%/*}/run.d"
 
 CMD="${0##*/}"
 EXEC="/sbin/$CMD"
@@ -33,44 +35,31 @@ esac
 usage()
 {
   cat <<-_eousage
-	Usage: $ME [options]
+	Usage: $ME [options] [-- script options]
 	       (shielding $EXEC)
+	
+	molly-guard's primary goal is to guard against accidental
+	shutdowns/reboots. $ME will run all scripts in $SCRIPTSDIR and only
+	invokes $EXEC if all scripts exited successfully.
 
-	Instead of invoking $EXEC directly, $ME will run a number of checks
-        to guard against accidental shutdowns/reboots.
-
-        Some of the checks available are:
-        - Prompt the user for the machine's if the current shell is a child
-          of an SSH connection (or --pretend-ssh) has been given on the
-          command line, if the shell is connected to an interactive
-	  terminal, and the actual command to execute is does not involve
-          --help or is \`shutdown -c'.
-
-	  $ME will always interpose the prompt if the environment variable
-          ALWAYS_MOLLY is set to '1'.  This variable may be set in the file
-	  /etc/default/${ME} .
-
-        - Print out a warning message with information about this host
-	  before the action takes place.  You can use:
-		/etc/molly-guard.<Action>.message
-	  To print out a message specific to the command you're trying to
-	  use.  Or:
-		/etc/molly-guard.message
-	  For a general warning message.
-
-	Only if the user satisfies all the checks will $ME take action.
 	Specifying --molly-guard-do-nothing as argument to the command will
-	make $ME echo the command it would execute rather than actually executing
-	it.
+	make $ME echo the command it would execute rather than actually
+	executing it.
+
+	Options following the double hyphen will be passed unchanged to the
+	scripts.
+
+	Please see molly-guard(8) for more information.
 
 	The actual command's help output follows:
 
 	_eousage
 }
 
-ARGS=
+CMDARGS=
+SCRIPTARGS=
+END_OF_ARGS=0
 DO_NOTHING=0
-CHECK_ARGS=
 for arg in "$@"; do
   case "$arg" in
     (*-molly-guard-do-nothing) DO_NOTHING=1;;
@@ -79,18 +68,24 @@ for arg in "$@"; do
       eval $EXEC --help 2>&1
       exit 0
       ;;
-    (*-pretend-ssh) CHECK_ARGS="${CHECK_ARGS:+$CHECK_ARGS }--arg --pretend-ssh";;
-    *) ARGS="${ARGS:+$ARGS }$arg";;
+    --) END_OF_ARGS=1;;
+    *) 
+      if [ $END_OF_ARGS -eq 0 ]; then
+        CMDARGS="${args:+$args }$arg"
+      else
+        SCRIPTARGS="${args:+$args }--arg $arg"
+      fi
+      ;;
   esac
 done
 
 do_real_cmd()
 {
   if [ $DO_NOTHING -eq 1 ]; then
-    echo "$ME: would run: $EXEC $ARGS"
+    echo "$ME: would run: $EXEC $CMDARGS"
     exit 0
   else
-    eval exec $EXEC "$ARGS"
+    eval exec $EXEC "$CMDARGS"
   fi
 }
 
@@ -99,17 +94,25 @@ if [ $DO_NOTHING -eq 1 ]; then
 fi
 
 # pass through certain commands
-case "$CMD $ARGS" in
-  (*shutdown\ *-c*) 
-    echo "I: executing $CMD $ARGS regardless of check results."
+case "$CMD $CMDARGS" in
+  (*shutdown\ *-c*)
+    # allow canceling shutdowns
+    echo "I: executing $CMD $CMDARGS regardless of check results."
     do_real_cmd
     ;;
 esac
 
-run-parts --exit-on-error --arg $CMD $CHECK_ARGS /etc/molly-guard/checks.d
+MOLLYGUARD_CMD=$CMD; export MOLLYGUARD_CMD
+MOLLYGUARD_DO_NOTHING=$DO_NOTHING; export MOLLYGUARD_DO_NOTHING
+MOLLYGUARD_SETTINGS="/etc/default/$ME"; export MOLLYGUARD_SETTINGS
 
-# run-parts won't return to us if there are failures, but I'm paranoid.
-if [ $? == 0 ]; then
-  do_real_cmd
-  exit
-fi
+for script in $(run-parts --test $SCRIPTSDIR); do
+  ret=0
+  eval $script $SCRIPTARGS || ret=$?
+  if [ $ret -ne 0 ]; then
+    echo "W: aborting $CMD due to ${script##*/} exiting with code $ret."
+    exit $ret
+  fi
+done
+
+do_real_cmd
