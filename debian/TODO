@@ -1,7 +1,0 @@
-molly-guard TODO
-================
-
-- add a configuration file which can be used to disable molly-guard
-  completely, or blanket-prevent any of the commands (so there's not even
-  a prompt) for remote machines that need not be rebooted ever. or something
-  like that.
