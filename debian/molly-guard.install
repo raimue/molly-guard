@@ -1,1 +1,3 @@
 shutdown /usr/share/molly-guard
+run.d/* /etc/molly-guard/run.d
+rc /etc/molly-guard
