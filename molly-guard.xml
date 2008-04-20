@@ -1,0 +1,281 @@
+<?xml version='1.0' encoding='ISO-8859-1'?>
+<!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN"
+"http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd" [
+
+<!--
+
+Process this file with an XSLT processor: `xsltproc \
+-''-nonet /usr/share/sgml/docbook/stylesheet/xsl/nwalsh/\
+manpages/docbook.xsl manpage.dbk'.  A manual page
+<package>.<section> will be generated.  You may view the
+manual page with: nroff -man <package>.<section> | less'.  A
+typical entry in a Makefile or Makefile.am is:
+
+DB2MAN=/usr/share/sgml/docbook/stylesheet/xsl/nwalsh/\
+manpages/docbook.xsl
+XP=xsltproc -''-nonet
+
+manpage.1: manpage.dbk
+        $(XP) $(DB2MAN) $<
+    
+The xsltproc binary is found in the xsltproc package.  The
+XSL files are in docbook-xsl.  Please remember that if you
+create the nroff version in one of the debian/rules file
+targets (such as build), you will need to include xsltproc
+and docbook-xsl in your Build-Depends control field.
+
+-->
+
+  <!-- Fill in your name for FIRSTNAME and SURNAME. -->
+  <!ENTITY dhfirstname "<firstname>martin f.</firstname>">
+  <!ENTITY dhsurname   "<surname>krafft</surname>">
+  <!-- Please adjust the date whenever revising the manpage. -->
+  <!ENTITY dhdate      "<date>Apr 19, 2008</date>">
+  <!-- SECTION should be 1-8, maybe w/ subsection other parameters are
+       allowed: see man(7), man(1). -->
+  <!ENTITY dhsection   "<manvolnum>8</manvolnum>">
+  <!ENTITY dhemail     "<email>madduck@madduck.net</email>">
+  <!ENTITY dhusername  "martin f. krafft">
+  <!ENTITY dhucpackage "<refentrytitle>molly-guard</refentrytitle>">
+  <!ENTITY dhpackage   "molly-guard">
+  <!ENTITY dhcommand   "<command>molly-guard</command>">
+
+  <!ENTITY debian      "<productname>Debian</productname>">
+  <!ENTITY gnu         "<acronym>GNU</acronym>">
+  <!ENTITY gpl         "&gnu; <acronym>GPL</acronym>">
+]>
+
+<refentry>
+  <refentryinfo>
+    <address>
+      &dhemail;
+    </address>
+    <copyright>
+      <year>2008</year>
+      <holder>&dhusername;</holder>
+    </copyright>
+    &dhdate;
+  </refentryinfo>
+  <refmeta>
+    &dhucpackage;
+
+    &dhsection;
+  </refmeta>
+  <refnamediv>
+    <refname>&dhcommand;</refname>
+
+    <refpurpose>guard against accidental shutdowns/reboots</refpurpose>
+  </refnamediv>
+
+  <refsynopsisdiv>
+    <cmdsynopsis>
+      <command>shutdown</command>
+      <arg choice="opt">
+        -<option>hV</option>
+      </arg>
+      <arg choice="opt">
+        <option>--molly-guard-do-nothing</option>
+      </arg>
+      <arg choice="opt">
+        -- <replaceable>script_options</replaceable>
+      </arg>
+    </cmdsynopsis>
+    <cmdsynopsis>
+      <command>halt</command>
+      <arg choice="opt">
+        -<option>hV</option>
+      </arg>
+      <arg choice="opt">
+        <option>--molly-guard-do-nothing</option>
+      </arg>
+      <arg choice="opt">
+        -- <replaceable>script_options</replaceable>
+      </arg>
+    </cmdsynopsis>
+    <cmdsynopsis>
+      <command>reboot</command>
+      <arg choice="opt">
+        -<option>hV</option>
+      </arg>
+      <arg choice="opt">
+        <option>--molly-guard-do-nothing</option>
+      </arg>
+      <arg choice="opt">
+        -- <replaceable>script_options</replaceable>
+      </arg>
+    </cmdsynopsis>
+    <cmdsynopsis>
+      <command>poweroff</command>
+      <arg choice="opt">
+        -<option>hV</option>
+      </arg>
+      <arg choice="opt">
+        <option>--molly-guard-do-nothing</option>
+      </arg>
+      <arg choice="opt">
+        -- <replaceable>script_options</replaceable>
+      </arg>
+    </cmdsynopsis>
+  </refsynopsisdiv>
+
+  <refsect1>
+    <title>DESCRIPTION</title>
+
+    <para> &dhcommand; attempts to prevent you from accidentally shutting down
+      or rebooting machines. It does this by injecting a couple of checks
+      before the existing commands: <command>halt</command>,
+      <command>reboot</command>, <command>shutdown</command>, and
+      <command>poweroff</command>. This happens via scripts with the same
+      names in <filename>/usr/sbin</filename>, so it only works if you have
+      <filename>/usr/sbin</filename> before <filename>/sbin</filename> in your
+      <envar>PATH</envar>!</para>
+
+    <para> Before &dhcommand; invokes the real command, all scripts in
+      <filename>/etc/molly-guard/run.d/</filename> have to run and exit
+      successfully; else, it aborts the command.
+      <command>run-parts(1)</command> is used to process the directory.</para>
+
+    <para> &dhcommand; passes any <replaceable>script_options</replaceable> to the
+      scripts, and also populates the environment with the following
+      variables:</para>
+
+    <itemizedlist>
+      <listitem><para><envar>MOLLYGUARD_CMD</envar> - the actual command
+          invoked by the user.</para></listitem>
+
+      <listitem><para><envar>MOLLYGUARD_DO_NOTHING</envar> - set to
+          <option>1</option> if this is a demo-run.</para></listitem>
+
+      <listitem><para><envar>MOLLYGUARD_SETTINGS</envar> - the path to
+          a shell script snippet which scripts can source to obtain
+          settings.</para></listitem>
+    </itemizedlist>
+
+    <para> &dhcommand; prints the contents of
+      <filename>/etc/molly-guard/messages.d/COMMAND</filename> or
+      <filename>/etc/molly-guard/messages.d/default</filename> to the console,
+      if either exists. This is due to
+      <filename>/etc/molly-guard/run.d/10-print-message</filename>.</para>
+
+  </refsect1>
+  <refsect1>
+    <title>GUARDING SSH SESSIONS</title>
+
+    <para> &dhcommand; was primarily designed to shield SSH connections. This
+      functionality (which should arguably be provided by the
+      <package>openssh-server</package> package) is implemented in
+      <filename>/etc/molly-guard/run.d/30-query-hostname</filename>.</para>
+
+    <para> This script first tests whether the command is being executed from
+      a <filename>tty</filename> which has been created by
+      <command>sshd</command>. It also checks whether the variable
+      <envar>SSH_CONNECTION</envar> is defined. If any of these tests are
+      successful, test script queries the user for the machine's hostname,
+      which should be sufficient to prevent the user from doing something by
+      accident.</para>
+
+    <para> You can pass the <option>--pretend-ssh</option> script option to
+      &dhcommand; to pretend that those tests succeeds. Alternatively, setting
+      <envar>ALWAYS_QUERY_HOSTNAME</envar> in
+      <filename>/etc/molly-guard/rc</filename> causes the script to
+      always query.</para>
+
+    <para> The following situations are still UNGUARDED. If you can think of
+      ways to protect against those, please let me know!</para>
+
+    <itemizedlist>
+      <listitem><para>running <application>sudo</application> within
+          <application>screen</application> or <application>screen</application> within
+          <application>sudo</application>; <application>sudo</application> eats the
+          <envar>SSH_CONNECTION</envar> variable, and
+          <application>screen</application> creates a new
+          <filename>pty</filename>.</para></listitem>
+      <listitem><para>executing those command in a remote terminal window,
+          that is a <application>XTerm</application> started on a remote
+          machine but displaying on the local <application>X</application>
+          server.</para></listitem>
+    </itemizedlist>
+
+    <para> You have been warned. You can use the
+      <option>--molly-guard-do-nothing</option> switch to prevent anything
+      from happening, e.g. <userinput>halt
+        --molly-guard-do-nothing</userinput>. </para>
+  </refsect1>
+
+  <refsect1>
+    <title>OPTIONS</title>
+    <variablelist>
+      <varlistentry>
+	<term>--molly-guard-do-nothing</term>
+	<listitem>
+	  <para>
+	    Cause &dhcommand; to print the command which would be executed,
+	    after processing all scripts, instead of executing it.
+          </para>
+	</listitem>
+      </varlistentry>
+
+      <varlistentry>
+	<term>-h</term>
+	<term>--help</term>
+	<listitem>
+	  <para>
+            Display usage information.
+          </para>
+	</listitem>
+      </varlistentry>
+
+      <varlistentry>
+	<term>-V</term>
+	<term>--version</term>
+	<listitem>
+	  <para>
+            Display version information.
+          </para>
+	</listitem>
+      </varlistentry>
+    </variablelist>
+  </refsect1>
+
+  <refsect1>
+    <title>SEE ALSO</title>
+    <para>
+      <citerefentry>
+	<refentrytitle>shutdown</refentrytitle>
+	<manvolnum>8</manvolnum>
+      </citerefentry>,
+      <citerefentry>
+	<refentrytitle>halt</refentrytitle>
+	<manvolnum>1</manvolnum>
+      </citerefentry>,
+      <citerefentry>
+	<refentrytitle>reboot</refentrytitle>
+	<manvolnum>8</manvolnum>
+      </citerefentry>,
+      <citerefentry>
+	<refentrytitle>poweroff</refentrytitle>
+	<manvolnum>8</manvolnum>
+      </citerefentry>.
+    </para>
+  </refsect1>
+
+  <refsect1>
+    <title>LEGALESE</title>
+
+    <para>
+      &dhpackage; is copyright by &dhusername;. Andrew Ruthven came up with
+      the idea of using the scripts directory and submitted a patch, which
+      I modified a bit.
+    </para>
+
+    <para>
+      This manual page was written by &dhusername; &dhemail;.
+    </para>
+
+    <para>
+      Permission is granted to copy, distribute and/or modify this document
+      under the terms of the Artistic License 2.0
+    </para>
+
+  </refsect1>
+</refentry>

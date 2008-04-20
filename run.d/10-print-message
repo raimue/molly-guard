@@ -1,0 +1,22 @@
+#!/bin/sh
+#
+# 10-print-message - print a (command-specific or default) message
+#
+# Copyright © Andrew Ruthven <andrew@etc.gen.nz>
+# Copyright © martin f. krafft <madduck@madduck.net>
+# Released under the terms of the Artistic Licence 2.0
+#
+# Prints either /etc/molly-guard/messages.d/$MOLLYGUARD_CMD
+#            or /etc/molly-guard/messages.d/default
+# depending on whether the first exists.
+#
+set -eu
+
+MESSAGESDIR=/etc/molly-guard/messages.d
+
+for i in $MOLLYGUARD_CMD default; do
+  if [ -f "$MESSAGESDIR/$i" ] && [ -r "$MESSAGESDIR/$i" ]; then
+    cat $MESSAGESDIR/$i
+    exit 0
+  fi
+done

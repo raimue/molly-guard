@@ -1,0 +1,60 @@
+#!/bin/sh
+#
+# 30-ask-hostname - request the user to type in the hostname of the local host
+#
+# Copyright © martin f. krafft <madduck@madduck.net>
+# Released under the terms of the Artistic Licence 2.0
+#
+set -eu
+
+ME=molly-guard
+
+[ -f "$MOLLYGUARD_SETTINGS" ] && . "$MOLLYGUARD_SETTINGS"
+
+PRETEND_SSH=0
+for arg in "$@"; do
+  case "$arg" in
+    (*-pretend-ssh) PRETEND_SSH=1;;
+  esac
+done
+
+# require an interactive terminal connected to stdin
+test -t 0 || exit 0
+
+# we've been asked to always protect this host
+if [ ${ALWAYS_QUERY_HOSTNAME:-0} -eq 1 ]; then
+  echo "I: $ME: $MOLLYGUARD_CMD is always molly-guarded on this system." >&2
+else
+  # only run if we are being called over SSH, that is if the current terminal
+  # was created by sshd.
+  PTS=$(readlink /proc/$$/fd/0)
+  if ! pgrep -f "^sshd.+${PTS#/dev/}[[:space:]]*$" >/dev/null \
+    && [ -z "${SSH_CONNECTION:-}" ]; then
+      if [ $PRETEND_SSH -eq 1 ]; then
+        echo "I: $ME: this is not an SSH session, but --pretend-ssh was given..." >&2
+      else
+        exit 0
+      fi
+  else
+    echo "W: $ME: SSH session detected!" >&2
+  fi
+fi
+
+HOSTNAME="$(hostname --short)"
+
+sigh()
+{
+  echo "Good thing I asked; I won't $MOLLYGUARD_CMD $HOSTNAME ..." >&2
+  exit 1
+}
+
+trap 'echo;sigh' 1 2 3 9 10 12 15
+
+echo -n "Please type in hostname of the machine to $MOLLYGUARD_CMD: "
+read HOSTNAME_USER || :
+
+[ "$HOSTNAME_USER" = "$HOSTNAME" ] || sigh
+
+trap - 1 2 3 9 10 12 15
+
+exit 0
