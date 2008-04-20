@@ -9,7 +9,8 @@ set -eu
 
 ME=molly-guard
 VERSION=0.4
-SCRIPTSDIR=/etc/molly-guard/run.d
+
+SCRIPTSDIR="@ETC_PREFIX@/etc/$ME/run.d"
 
 CMD="${0##*/}"
 EXEC="/sbin/$CMD"
@@ -17,16 +18,16 @@ EXEC="/sbin/$CMD"
 case "$CMD" in
   halt|reboot|shutdown|poweroff)
     if [ ! -f $EXEC ]; then
-      echo "E: $ME: not a regular file: $EXEC" >&2
+      echo "E: not a regular file: $EXEC" >&2
       exit 4
     fi
     if [ ! -x $EXEC ]; then
-      echo "E: $ME: not an executable: $EXEC" >&2
+      echo "E: not an executable: $EXEC" >&2
       exit 3
     fi
     ;;
   *)
-    echo "E: $ME: unsupported command: $CMD" >&2
+    echo "E: unsupported command: $CMD" >&2
     exit 1
     ;;
 esac
@@ -103,7 +104,7 @@ esac
 
 MOLLYGUARD_CMD=$CMD; export MOLLYGUARD_CMD
 MOLLYGUARD_DO_NOTHING=$DO_NOTHING; export MOLLYGUARD_DO_NOTHING
-MOLLYGUARD_SETTINGS="/etc/molly-guard/rc"; export MOLLYGUARD_SETTINGS
+MOLLYGUARD_SETTINGS="@ETC_PREFIX@/etc/$ME/rc"; export MOLLYGUARD_SETTINGS
 
 for script in $(run-parts --test $SCRIPTSDIR); do
   ret=0

@@ -1,4 +1,5 @@
 /build-stamp
 /configure-stamp
 .*.sw?
-/molly-guard.8
+/molly-guard.8*
+/shutdown
