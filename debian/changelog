@@ -1,3 +1,9 @@
+molly-guard (0.4.1-1) unstable; urgency=low
+
+  * New upstream release, to unstable.
+
+ -- martin f. krafft <madduck@debian.org>  Sat, 31 May 2008 16:20:35 +0200
+
 molly-guard (0.4-1~exp.1) experimental; urgency=low
 
   * New upstream release, thanks a lot to Andrew Ruthven for his input and
