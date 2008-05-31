@@ -10,7 +10,7 @@ set -eu
 ME=molly-guard
 VERSION=0.4
 
-SCRIPTSDIR="@ETC_PREFIX@/etc/$ME/run.d"
+SCRIPTSDIR="@ETCDIR@/run.d"
 
 CMD="${0##*/}"
 EXEC="/sbin/$CMD"
@@ -104,7 +104,7 @@ esac
 
 MOLLYGUARD_CMD=$CMD; export MOLLYGUARD_CMD
 MOLLYGUARD_DO_NOTHING=$DO_NOTHING; export MOLLYGUARD_DO_NOTHING
-MOLLYGUARD_SETTINGS="@ETC_PREFIX@/etc/$ME/rc"; export MOLLYGUARD_SETTINGS
+MOLLYGUARD_SETTINGS="@ETCDIR@/rc"; export MOLLYGUARD_SETTINGS
 
 for script in $(run-parts --test $SCRIPTSDIR); do
   ret=0
