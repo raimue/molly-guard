@@ -23,7 +23,7 @@ clean:
 .PHONY: clean
 
 shutdown: shutdown.in
-	sed -e 's,@ETC_PREFIX@,$(etc_prefix),g' $< > $@
+	sed -e 's,@ETCDIR@,$(ETCDIR),g' $< > $@
 
 install: shutdown molly-guard.8.gz
 	mkdir -m755 --parent $(DST)/share/molly-guard
