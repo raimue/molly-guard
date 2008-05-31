@@ -5,6 +5,8 @@
 # Uncomment this to turn on verbose mode.
 #export DH_VERBOSE=1
 
+DESTDIR=$(PWD)/debian/molly-guard
+
 configure: configure-stamp
 configure-stamp:
 	dh_testdir
@@ -13,7 +15,7 @@ configure-stamp:
 build: build-stamp
 build-stamp: configure-stamp 
 	dh_testdir
-	$(MAKE)
+	$(MAKE) prefix=/usr etc_prefix=/
 	touch $@
 
 clean:
@@ -26,14 +28,12 @@ clean:
 install: build
 	dh_testdir
 	dh_testroot
-	dh_clean -k 
+	dh_clean -k
 	dh_installdirs
-	dh_install
-	dh_link
+	$(MAKE) install DEST=$(DESTDIR) prefix=/usr etc_prefix=/
 
 binary-arch: build install
 
-binary-indep: DESTDIR=debian/molly-guard
 binary-indep: build install
 	dh_testdir
 	dh_testroot
