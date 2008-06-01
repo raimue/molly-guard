@@ -1,3 +1,10 @@
+molly-guard (0.4.3-1) unstable; urgency=low
+
+  * New upstream release, which properly detects sshd sessions, even if
+    ControlMaster is in use.
+
+ -- martin f. krafft <madduck@debian.org>  Sun, 01 Jun 2008 23:20:00 +0200
+
 molly-guard (0.4.2-1) unstable; urgency=low
 
   * New upstream release, to unstable.

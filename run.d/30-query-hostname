@@ -27,7 +27,7 @@ case "${ALWAYS_QUERY_HOSTNAME:-0}" in
     # only run if we are being called over SSH, that is if the current terminal
     # was created by sshd.
     PTS=$(readlink /proc/$$/fd/0)
-    if ! pgrep -f "^sshd.+${PTS#/dev/}[[:space:]]*$" >/dev/null \
+    if ! pgrep -f "^sshd.+${PTS#/dev/}\>" >/dev/null \
       && [ -z "${SSH_CONNECTION:-}" ]; then
         if [ $PRETEND_SSH -eq 1 ]; then
           echo "I: $ME: this is not an SSH session, but --pretend-ssh was given..." >&2
