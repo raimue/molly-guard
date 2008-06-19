@@ -1,3 +1,10 @@
+molly-guard (0.4.4-1) unstable; urgency=low
+
+  * New upstream release, which now properly passes arguments to the real
+    commands (closes: #486945).
+
+ -- martin f. krafft <madduck@debian.org>  Thu, 19 Jun 2008 10:17:35 +0200
+
 molly-guard (0.4.3-1) unstable; urgency=low
 
   * New upstream release, which properly detects sshd sessions, even if

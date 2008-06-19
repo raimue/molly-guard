@@ -71,9 +71,9 @@ for arg in "$@"; do
     --) END_OF_ARGS=1;;
     *) 
       if [ $END_OF_ARGS -eq 0 ]; then
-        CMDARGS="${args:+$args }$arg"
+        CMDARGS="${CMDARGS:+$CMDARGS }$arg"
       else
-        SCRIPTARGS="${args:+$args }--arg $arg"
+        SCRIPTARGS="${SCRIPTARGS:+$SCRIPTARGS }--arg $arg"
       fi
       ;;
   esac
