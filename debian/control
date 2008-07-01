@@ -9,7 +9,7 @@ Vcs-Browser: http://git.debian.org/?p=collab-maint/molly-guard.git
 
 Package: molly-guard
 Architecture: all
-Depends: sysvinit | upstart, procps
+Depends: procps
 Enhances: sysvinit, upstart, openssh-server
 Description: protects machines from accidental shutdowns/reboots
  The package installs a shell script that overrides the existing

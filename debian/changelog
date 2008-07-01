@@ -1,3 +1,10 @@
+molly-guard (0.4.4-2) unstable; urgency=low
+
+  * Remove dependency on sysvutils, which is essential, and upstart, which is
+    in experimental still (closes: #488722).
+
+ -- martin f. krafft <madduck@debian.org>  Tue, 01 Jul 2008 15:28:51 +0200
+
 molly-guard (0.4.4-1) unstable; urgency=low
 
   * New upstream release, which now properly passes arguments to the real
