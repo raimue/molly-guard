@@ -26,7 +26,7 @@ case "${ALWAYS_QUERY_HOSTNAME:-0}" in
   0|false|False|no|No|off|Off)
     # only run if we are being called over SSH, that is if the current terminal
     # was created by sshd.
-    PTS=$(readlink /proc/$$/fd/0)
+    PTS=$(tty)
     if ! pgrep -f "^sshd.+${PTS#/dev/}\>" >/dev/null \
       && [ -z "${SSH_CONNECTION:-}" ]; then
         if [ $PRETEND_SSH -eq 1 ]; then

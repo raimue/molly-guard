@@ -1,3 +1,9 @@
+2010-02-01 martin f. krafft <madduck@debian.org>
+
+  Version 0.4.5
+  * Use tty tool to detect the tty of stdin, rather than /proc/*/fd/0, which
+    is Linux-specificy.
+
 2008-06-19 martin f. krafft <madduck@debian.org>
 
   Version 0.4.4
