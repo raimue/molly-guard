@@ -1,0 +1,68 @@
+2008-06-19 martin f. krafft <madduck@debian.org>
+
+  Version 0.4.4
+  * Fix argument passing to real commands.
+
+2008-06-01 martin f. krafft <madduck@debian.org>
+
+  Version 0.4.3
+  * Properly detects sshd sessions, even if ControlMaster is in use.
+
+2008-05-31 martin f. krafft <madduck@debian.org>
+
+  Version 0.4.2
+  * Improved checking for ALWAYS_QUERY_HOSTNAME
+
+2008-05-31 martin f. krafft <madduck@debian.org>
+
+  Version 0.4.1
+  * Improved installation routine
+
+2008-04-19 martin f. krafft <madduck@debian.org>
+
+  Version 0.4
+  * Checks are now done with run-parts to allow for easier extension.
+  * Setting to simply always guard commands, bypassing checks.
+  * Add ability to print custom warnings before the checks/prompt.
+
+2008-03-16 martin f. krafft <madduck@debian.org>
+
+  Version 0.3.2
+  * Don't fail if the SSH_CONNECTION variable is unset.
+
+2008-03-12 martin f. krafft <madduck@debian.org>
+
+  Version 0.3.1
+  * Pass --short option to hostname to prevent the user from having to type
+    the whole FQDN at times.
+  * Check for the $SSH_CONNECTION variable in addition to the pty checks.
+  * Add a basic REAMDE file.
+
+2007-05-26 martin f. krafft <madduck@debian.org>
+
+  Version 0.3
+  * Shield shutdown -h; I am terribly sorry, Andrew!
+    Now only shutdown -c and * --help are passed through regardless.
+  * Added --help option, which now prints a short molly-guard help message
+    followed by the actual command's help output.
+  * Now should also work in su/sudo sessions because it now checks whether the
+    creator of the current tty/pts is sshd, rather than the brittle check for
+    the environment. Thanks to Craig Small and Don Armstrong for their sparks
+    of brilliance.
+  * Added --pretend-ssh option to facilitate testing.
+
+2006-12-06 martin f. krafft <madduck@debian.org>
+
+  Version 0.2.2 which also protects the poweroff command
+
+2006-10-19 martin f. krafft <madduck@debian.org>
+
+  Version 0.2.1 with improved shell quoting.
+
+2006-10-19 martin f. krafft <madduck@debian.org>
+
+  Version 0.2, which does better --help option handling.
+
+2006-10-19 martin f. krafft <madduck@debian.org>
+
+  Initial release, version 0.1
