@@ -1,8 +1,13 @@
-2010-02-01 martin f. krafft <madduck@debian.org>
+2012-02-22 Ludovico Gardenghi <garden@debian.org>
 
   Version 0.4.5
+  [ Martin F. Krafft]
   * Use tty tool to detect the tty of stdin, rather than /proc/*/fd/0, which
     is Linux-specificy.
+
+  [ Ludovico Gardenghi ]
+  * Check the process tree from the shell up to init and look for a 'sshd'
+    process.
 
 2008-06-19 martin f. krafft <madduck@debian.org>
 
