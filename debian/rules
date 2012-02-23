@@ -5,7 +5,7 @@
 # Uncomment this to turn on verbose mode.
 #export DH_VERBOSE=1
 
-DESTDIR=$(PWD)/debian/molly-guard
+DESTDIR=$(CURDIR)/debian/molly-guard
 
 configure: configure-stamp
 configure-stamp:
