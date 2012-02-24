@@ -1,3 +1,18 @@
+molly-guard (0.4.5-1) unstable; urgency=low
+
+  * New upstream release, which works properly with kFreeBSD
+    (closes: #548099).
+    - remove linuxism /proc/<pid>/fd/0;
+    - add check for ssh in the ancestry of the shell process.
+  * Add Uploader: Ludovico Gardenghi <garden@debian.org>
+  * Bump debhelper compatibility level to 7:
+    - replace dh_clean -k with dh_prep.
+  * Bump Standars-Version to 3.9.3: no other changes required.
+  * Add recommended build-indep and build-arch targets in debian/rules.
+  * Replace $(PWD) with $(CURDIR) in debian/rules.
+
+ -- Ludovico Gardenghi <garden@debian.org>  Fri, 24 Feb 2012 01:02:20 +0100
+
 molly-guard (0.4.4-2) unstable; urgency=low
 
   * Remove dependency on sysvutils, which is essential, and upstart, which is
