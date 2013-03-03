@@ -63,7 +63,7 @@ case "${ALWAYS_QUERY_HOSTNAME:-0}" in
     ;;
 esac
 
-HOSTNAME="$(hostname --short)"
+HOSTNAME="$(hostname -s)"
 
 sigh()
 {
