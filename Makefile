@@ -27,7 +27,7 @@ all: molly-guard.8.gz shutdown
 	$(XP) $(DB2MAN) $<
 
 %.gz: %
-	gzip -9 $<
+	gzip -9 -c $< > $@
 
 man: molly-guard.8
 	man -l $<
