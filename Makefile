@@ -3,6 +3,22 @@ etc_prefix?=$(prefix)
 DST=$(DEST)$(prefix)
 ETCDIR=$(DEST)$(etc_prefix)/etc/molly-guard
 
+# Detect Mac OS X systems
+UNAME=$(shell uname)
+ifeq ($(UNAME),Darwin)
+DARWIN=1
+endif
+
+ifeq ($(DARWIN),1)
+USER=root
+GROUP=wheel
+SCRIPTDIR=libexec/molly-guard
+else
+USER=root
+GROUP=root
+SCRIPTDIR=share/molly-guard
+endif
+
 all: molly-guard.8.gz shutdown
 
 %.8: DB2MAN=/usr/share/sgml/docbook/stylesheet/xsl/nwalsh/manpages/docbook.xsl
@@ -26,22 +42,24 @@ shutdown: shutdown.in
 	sed -e 's,@ETCDIR@,$(ETCDIR),g' $< > $@
 
 install: shutdown molly-guard.8.gz
-	mkdir -m755 -p $(DST)/share/molly-guard
-	install -m755 -oroot -groot shutdown $(DST)/$(SCRIPTDIR)
+	mkdir -m755 -p $(DST)/$(SCRIPTDIR)
+	install -m755 -o$(USER) -g$(GROUP) shutdown $(DST)/$(SCRIPTDIR)
 
 	mkdir -m755 -p $(DST)/sbin
-	ln -s ../share/molly-guard/shutdown $(DST)/sbin/poweroff
-	ln -s ../share/molly-guard/shutdown $(DST)/sbin/halt
-	ln -s ../share/molly-guard/shutdown $(DST)/sbin/reboot
-	ln -s ../share/molly-guard/shutdown $(DST)/sbin/shutdown
+ifneq ($(DARWIN),1)
+	ln -s ../$(SCRIPTDIR)/shutdown $(DST)/sbin/poweroff
+endif
+	ln -s ../$(SCRIPTDIR)/shutdown $(DST)/sbin/halt
+	ln -s ../$(SCRIPTDIR)/shutdown $(DST)/sbin/reboot
+	ln -s ../$(SCRIPTDIR)/shutdown $(DST)/sbin/shutdown
 
 	mkdir -m755 -p $(ETCDIR)
-	install -m644 -oroot -groot rc $(ETCDIR)
+	install -m644 -o$(USER) -g$(GROUP) rc $(ETCDIR)
 	cp -r run.d $(ETCDIR) \
-	  && chown root:root $(ETCDIR)/run.d && chmod 755 $(ETCDIR)/run.d
+	  && chown -R $(USER):$(GROUP) $(ETCDIR)/run.d && chmod -R 755 $(ETCDIR)/run.d
 
 	mkdir -m755 -p $(ETCDIR)/messages.d
 
 	mkdir -m755 -p $(DST)/share/man/man8
-	install -m644 -oroot -groot molly-guard.8.gz $(DST)/share/man/man8
+	install -m644 -o$(USER) -g$(GROUP) molly-guard.8.gz $(DST)/share/man/man8
 .PHONY: install
