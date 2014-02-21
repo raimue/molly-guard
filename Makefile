@@ -3,21 +3,9 @@ etc_prefix?=$(prefix)
 DST=$(DEST)$(prefix)
 ETCDIR=$(DEST)$(etc_prefix)/etc/molly-guard
 
-# Detect Mac OS X systems
-UNAME=$(shell uname)
-ifeq ($(UNAME),Darwin)
-DARWIN=1
-endif
-
-ifeq ($(DARWIN),1)
 USER=root
 GROUP=wheel
 SCRIPTDIR=libexec/molly-guard
-else
-USER=root
-GROUP=root
-SCRIPTDIR=share/molly-guard
-endif
 
 all: molly-guard.8.gz shutdown
 
@@ -46,9 +34,6 @@ install: shutdown molly-guard.8.gz
 	install -m755 -o$(USER) -g$(GROUP) shutdown $(DST)/$(SCRIPTDIR)
 
 	mkdir -m755 -p $(DST)/sbin
-ifneq ($(DARWIN),1)
-	ln -s ../$(SCRIPTDIR)/shutdown $(DST)/sbin/poweroff
-endif
 	ln -s ../$(SCRIPTDIR)/shutdown $(DST)/sbin/halt
 	ln -s ../$(SCRIPTDIR)/shutdown $(DST)/sbin/reboot
 	ln -s ../$(SCRIPTDIR)/shutdown $(DST)/sbin/shutdown
