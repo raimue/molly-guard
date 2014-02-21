@@ -21,7 +21,7 @@ endif
 
 all: molly-guard.8.gz shutdown
 
-%.8: DB2MAN=/usr/share/sgml/docbook/stylesheet/xsl/nwalsh/manpages/docbook.xsl
+%.8: DB2MAN=$(prefix)/share/xsl/docbook-xsl/manpages/docbook.xsl
 %.8: XP=xsltproc -''-nonet
 %.8: %.xml
 	$(XP) $(DB2MAN) $<
