@@ -49,7 +49,7 @@ case "${ALWAYS_QUERY_HOSTNAME:-0}" in
     # only run if we are being called over SSH, that is if the current terminal
     # was created by sshd.
     PTS=$(tty)
-    if ! pgrep -f "^sshd.+${PTS#/dev/}\>" >/dev/null \
+    if ! /usr/bin/pgrep -a -f "^sshd.*${PTS#/dev/}[[:>:]]" >/dev/null \
       && [ -z "${SSH_CONNECTION:-}" ] \
       && ! is_child_of_sshd; then
         if [ $PRETEND_SSH -eq 1 ]; then
