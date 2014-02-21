@@ -27,7 +27,7 @@ shutdown: shutdown.in
 
 install: shutdown molly-guard.8.gz
 	mkdir -m755 -p $(DST)/share/molly-guard
-	install -m755 -oroot -oroot shutdown $(DST)/share/molly-guard
+	install -m755 -oroot -groot shutdown $(DST)/$(SCRIPTDIR)
 
 	mkdir -m755 -p $(DST)/sbin
 	ln -s ../share/molly-guard/shutdown $(DST)/sbin/poweroff
@@ -36,7 +36,7 @@ install: shutdown molly-guard.8.gz
 	ln -s ../share/molly-guard/shutdown $(DST)/sbin/shutdown
 
 	mkdir -m755 -p $(ETCDIR)
-	install -m644 -oroot -oroot rc $(ETCDIR)
+	install -m644 -oroot -groot rc $(ETCDIR)
 	cp -r run.d $(ETCDIR) \
 	  && chown root:root $(ETCDIR)/run.d && chmod 755 $(ETCDIR)/run.d
 
