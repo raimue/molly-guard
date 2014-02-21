@@ -1,7 +1,7 @@
 prefix?=/usr/local
 etc_prefix?=$(prefix)
 DST=$(DEST)$(prefix)
-ETCDIR=$(DEST)$(etc_prefix)/etc/molly-guard
+ETCDIR=$(etc_prefix)/etc/molly-guard
 
 # Detect Mac OS X systems
 UNAME=$(shell uname)
@@ -53,12 +53,12 @@ endif
 	ln -s ../$(SCRIPTDIR)/shutdown $(DST)/sbin/reboot
 	ln -s ../$(SCRIPTDIR)/shutdown $(DST)/sbin/shutdown
 
-	mkdir -m755 -p $(ETCDIR)
-	install -m644 -o$(USER) -g$(GROUP) rc $(ETCDIR)
-	cp -r run.d $(ETCDIR) \
-	  && chown -R $(USER):$(GROUP) $(ETCDIR)/run.d && chmod -R 755 $(ETCDIR)/run.d
+	mkdir -m755 -p $(DEST)/$(ETCDIR)
+	install -m644 -o$(USER) -g$(GROUP) rc $(DEST)/$(ETCDIR)
+	cp -r run.d $(DEST)/$(ETCDIR) \
+	  && chown -R $(USER):$(GROUP) $(DEST)/$(ETCDIR)/run.d && chmod -R 755 $(DEST)/$(ETCDIR)/run.d
 
-	mkdir -m755 -p $(ETCDIR)/messages.d
+	mkdir -m755 -p $(DEST)/$(ETCDIR)/messages.d
 
 	mkdir -m755 -p $(DST)/share/man/man8
 	install -m644 -o$(USER) -g$(GROUP) molly-guard.8.gz $(DST)/share/man/man8
