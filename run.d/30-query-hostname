@@ -73,7 +73,7 @@ sigh()
 
 trap 'echo;sigh' 1 2 3 9 10 12 15
 
-echo -n "Please type in hostname of the machine to $MOLLYGUARD_CMD: "
+printf "%s" "Please type in hostname of the machine to $MOLLYGUARD_CMD: "
 read HOSTNAME_USER || :
 
 [ "$HOSTNAME_USER" = "$HOSTNAME" ] || sigh
