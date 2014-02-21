@@ -38,7 +38,7 @@ install: shutdown molly-guard.8.gz
 	mkdir -m755 -p $(ETCDIR)
 	install -m644 -oroot -oroot rc $(ETCDIR)
 	cp -r run.d $(ETCDIR) \
-	  && chown root.root $(ETCDIR)/run.d && chmod 755 $(ETCDIR)/run.d
+	  && chown root:root $(ETCDIR)/run.d && chmod 755 $(ETCDIR)/run.d
 
 	mkdir -m755 -p $(ETCDIR)/messages.d
 
